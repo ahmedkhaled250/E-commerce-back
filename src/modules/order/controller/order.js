@@ -9,9 +9,9 @@ import {
   findOneAndUpdate,
   updateOne,
 } from "../../../../DB/DBMethods.js";
-import { fileURLToPath } from "url";
-import path from "path";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// import { fileURLToPath } from "url";
+// import path from "path";
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import productModel from "../../../../DB/models/Product.js";
 import couponModel from "../../../../DB/models/Coupon.js";
 import orderModel from "../../../../DB/models/Order.js";
@@ -21,7 +21,7 @@ import sendEmail from "../../../utils/sendEmail.js";
 import Stripe from "stripe";
 import payment from "../../../utils/payment.js";
 import productCartModel from "../../../../DB/models/ProductsOfCart.js";
-import { createInvoice } from "../../../utils/pdf.js";
+// import { createInvoice } from "../../../utils/pdf.js";
 export const addOrder = asyncHandler(async (req, res, next) => {
   const { user } = req;
   const { couponName, paymentMethod } = req.body;
@@ -125,21 +125,21 @@ export const addOrder = asyncHandler(async (req, res, next) => {
       data: { $push: { usedBy: user._id } },
     });
   }
-  const invoice = {
-    shipping: {
-      name: user.userName,
-      address: order.address,
-      city: "Cairo",
-      state: "aul makram streat",
-      country: "Egypt",
-    },
-    items: order.products,
-    subtotal: subtotalPrice,
-    total: order.finalPrice,
-    date: order.createdAt,
-    invoice_nr: order.phone,
-  };
-  await createInvoice(invoice, path.join(__dirname, "../../../../invoice.pdf"));
+  // const invoice = {
+  //   shipping: {
+  //     name: user.userName,
+  //     address: order.address,
+  //     city: "Cairo",
+  //     state: "aul makram streat",
+  //     country: "Egypt",
+  //   },
+  //   items: order.products,
+  //   subtotal: subtotalPrice,
+  //   total: order.finalPrice,
+  //   date: order.createdAt,
+  //   invoice_nr: order.phone,
+  // };
+  // await createInvoice(invoice, path.join(__dirname, "../../../../invoice.pdf"));
   await sendEmail({
     to: user.email,
     subject: "invoice",
