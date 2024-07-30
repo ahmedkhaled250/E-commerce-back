@@ -6,6 +6,7 @@ import brandRouter from "./Brand/brand.router.js";
 import productRouter from "./Product/product.router.js";
 import couponRouter from "./Coupon/coupon.router.js";
 import cartRouter from "./Cart/cart.router.js";
+import orderRouter from "./order/order.router.js";
 import morgan from "morgan";
 import { globalError } from "../utils/errorHandling.js";
 import cors from "cors";
@@ -23,7 +24,7 @@ const bootstrap = (app, express) => {
   if (process.env.MOOD == "DEV") {
     app.use(morgan("dev"));
   } else {
-    app.use(morgan("combined"));
+  app.use(morgan("combined"));
   }
   // Setup api routing
   app.use(`/auth`, authRouter);
@@ -34,6 +35,7 @@ const bootstrap = (app, express) => {
   app.use(`/product`, productRouter);
   app.use(`/coupon`, couponRouter);
   app.use(`/cart`, cartRouter);
+  app.use(`/order`, orderRouter);
   app.use("*", (req, res) => {
     res.status(404).json({ message: "In-valid routing" });
   });

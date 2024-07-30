@@ -119,7 +119,7 @@ function generateInvoiceTable(doc, invoice) {
     formatCurrency(invoice.total * 100)
   );
 
-  const duePosition = paidToDatePosition + 25;
+  // const duePosition = paidToDatePosition + 25;
   doc.font("Helvetica-Bold");
   // generateTableRow(
   //     doc,
