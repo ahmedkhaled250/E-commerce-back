@@ -125,6 +125,33 @@ export const addOrder = asyncHandler(async (req, res, next) => {
       data: { $push: { usedBy: user._id } },
     });
   }
+
+  // const invoice = {
+  //   shipping: {
+  //     name: user.userName,
+  //     address: order.address,
+  //     city: "Cairo",
+  //     state: "aul makram streat",
+  //     country: "Egypt",
+  //   },
+  //   items: order.products,
+  //   subtotal: subtotalPrice,
+  //   total: order.finalPrice,
+  //   date: order.createdAt,
+  //   invoice_nr: order.phone,
+  // };
+  // await createInvoice(invoice, path.join(__dirname, "../../../../invoice.pdf"));
+  // await sendEmail({
+  //   to: user.email,
+  //   subject: "invoice",
+  //   attachments: [
+  //     {
+  //       path: "invoice.pdf",
+  //       contentType: "application/pdf",
+  //     },
+  //   ],
+  // });
+
   if (order.paymentMethod == "card") {
     const stripe = new Stripe(process.env.STRIPE_KEY);
     if (req.body.coupon) {
@@ -139,8 +166,8 @@ export const addOrder = asyncHandler(async (req, res, next) => {
       payment_method_types: ["card"],
       mode: "payment",
       customer_email: user.email,
-      cancel_url: `${process.env.CENCEL_URL}`,
-      success_url: `${process.env.SUCCESS_URL}`,
+      cancel_url: process.env.CENCEL_URL,
+      success_url: process.env.SUCCESS_URL,
       metadata: { orderId: order._id.toString() },
       discounts: req.body.couponId ? [{ coupon: req.body.couponId }] : [],
       line_items: order.products.map((product) => {
@@ -286,32 +313,3 @@ export const webhook = asyncHandler(async (req, res, next) => {
   });
   return res.status(200).json({ message: "Done" });
 });
-
-
-
-
-// const invoice = {
-//   shipping: {
-//     name: user.userName,
-//     address: order.address,
-//     city: "Cairo",
-//     state: "aul makram streat",
-//     country: "Egypt",
-//   },
-//   items: order.products,
-//   subtotal: subtotalPrice,
-//   total: order.finalPrice,
-//   date: order.createdAt,
-//   invoice_nr: order.phone,
-// };
-// await createInvoice(invoice, path.join(__dirname, "../../../../invoice.pdf"));
-// await sendEmail({
-//   to: user.email,
-//   subject: "invoice",
-//   attachments: [
-//     {
-//       path: "invoice.pdf",
-//       contentType: "application/pdf",
-//     },
-//   ],
-// });
