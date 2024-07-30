@@ -3,13 +3,15 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 import {
   create,
   deleteMany,
-  deleteOne,
   findByIdAndUpdate,
   findOne,
   findOneAndDelete,
   findOneAndUpdate,
   updateOne,
 } from "../../../../DB/DBMethods.js";
+import { fileURLToPath } from "url";
+import path from "path";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import productModel from "../../../../DB/models/Product.js";
 import couponModel from "../../../../DB/models/Coupon.js";
 import orderModel from "../../../../DB/models/Order.js";
@@ -137,7 +139,7 @@ export const addOrder = asyncHandler(async (req, res, next) => {
     date: order.createdAt,
     invoice_nr: order.phone,
   };
-  await createInvoice(invoice,"invoice.pdf");
+  await createInvoice(invoice, path.join(__dirname, "../../../../invoice.pdf"));
   await sendEmail({
     to: user.email,
     subject: "invoice",
