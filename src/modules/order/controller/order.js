@@ -206,7 +206,7 @@ export const cencelOrder = asyncHandler(async (req, res, next) => {
   ) {
     return next(
       new Error(
-        `You can't cencel your order after it's been changed to ${order.status}`,
+        `You can't cencel your order after it's been changed to ${order.status} and payment method is ${order.paymentMethod}`,
         { cause: 400 }
       )
     );
