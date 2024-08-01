@@ -173,7 +173,7 @@ export const addOrder = asyncHandler(async (req, res, next) => {
       line_items: order.products.map((product) => {
         return {
           price_data: {
-            currency: "usd",
+            currency: "egp",
             product_data: {
               name: product.name,
             },
@@ -231,8 +231,8 @@ export const cencelOrder = asyncHandler(async (req, res, next) => {
       data: { $pull: { usedBy: user._id } },
     });
   }
-  await order.save();
-  return res.status(200).json({ message: "Done" });
+  const finalOrder = await order.save();
+  return res.status(200).json({ message: "Done", order: finalOrder });
 });
 export const userOrders = asyncHandler(async (req, res, next) => {
   const { user } = req;
