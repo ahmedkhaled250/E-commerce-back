@@ -10,9 +10,11 @@ import {
 import productModel from "../../../../DB/models/Product.js";
 import reviewModel from "../../../../DB/models/Review.js";
 import ApiFeatures from "../../../utils/apiFeatures.js";
+import orderModel from "../../../../DB/models/Order.js";
 
 export const addReview = asyncHandler(async (req, res, next) => {
   const { user } = req;
+  console.log(user);
   const { productId } = req.params;
   if (user.deleted) {
     return next(new Error("Your account is deleted", { cause: 400 }));

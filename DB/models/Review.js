@@ -19,11 +19,6 @@ const reviewSchema = new Schema(
       ref: "Product",
       required: [true, "ProductId is required"],
     },
-    productId: {
-      type: Types.ObjectId,
-      ref: "Product",
-      required: [true, "can not copon without product"],
-    },
     orderId: {
       type: Types.ObjectId,
       ref: "Order",

@@ -2,7 +2,7 @@ import joi from "joi";
 import { generalFields ,validateQuery} from "../../middleware/validation.js";
 export const addReview = joi
   .object({
-    message: joi.string().min(2).max(50).required(),
+    message: joi.string().min(2).max(300).required(),
     rating: joi.number().min(1).max(5).required(),
     productId: generalFields.id,
     authorization: generalFields.headers,
