@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const connectDB = async()=>{
+const connectDB = async ()=>{
     const DBURI = process.env.DBURI
     return await mongoose.connect(DBURI)
     .then(res=>console.log(`DB connected successfully on.....${DBURI}`))

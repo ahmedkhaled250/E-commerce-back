@@ -15,6 +15,7 @@ import { compare, hash } from "../../../utils/HashAndCompare.js";
 import { encrypt } from "../../../utils/encryptAndDecrypt.js";
 import calculateAge from "../../../utils/calcAge.js";
 export const signup = asyncHandler(async (req, res, next) => {
+
   const { userName, password, phone, gender, address, role, DOB } = req.body;
   const email = req.body.email.toLowerCase();
   const user = await findOne({
@@ -25,6 +26,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   if (user) {
     return next(new Error("Email exist", { cause: 409 }));
   }
+
   const token = generateToken({
     payload: { email },
     signature: process.env.EMAILTOKEN,
@@ -149,6 +151,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   }
   const hashPassword = hash({ plaintext: password });
   const encryptedPhone = encrypt({ phone });
+
   const newUser = await create({
     model: userModel,
     data: {
@@ -164,7 +167,9 @@ export const signup = asyncHandler(async (req, res, next) => {
     },
   });
   return res.status(201).json({ message: "Done", userId: newUser._id });
+
 });
+
 export const confirmEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
   const decoded = verifyToken({ token, signature: process.env.EMAILTOKEN });

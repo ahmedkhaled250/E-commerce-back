@@ -4,10 +4,16 @@ import { fileValidation, myMulter } from "../../utils/multer.js";
 import endPoint from "./subcategory.endPoints.js";
 import * as validators from "./subcategory.validation.js";
 import * as subcategoryController from "./controller/subcategory.js";
-import { Router } from "express";
+
+
+import {Router} from "express";
+
 const router = Router({ mergeParams: true });
+
 import productRouter from "../Product/product.router.js";
+
 router.use("/:subcategoryId/product", productRouter);
+
 router.post(
   "/",
   myMulter(fileValidation.image).single("image"),
@@ -15,6 +21,7 @@ router.post(
   auth(endPoint.Admin),
   subcategoryController.createSubcategory
 );
+
 router.put(
   "/:id",
   myMulter(fileValidation.image).single("image"),
@@ -22,19 +29,23 @@ router.put(
   auth(endPoint.Admin),
   subcategoryController.updateSubcategory
 );
+
 router.get(
   "/",
   validation(validators.subCategories),
   subcategoryController.subCategories
 );
+
 router.get(
   "/subCategoryByCategoryId",
   validation(validators.subCategoryByCategoryId),
   subcategoryController.subCategoryByCategoryId
 );
+
 router.get(
   "/:id",
   validation(validators.getSubcategoryById),
   subcategoryController.getSubcategoryById
 );
+
 export default router;

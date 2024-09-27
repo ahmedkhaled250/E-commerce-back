@@ -2,11 +2,13 @@ import userModel from "../../DB/models/User.js";
 import { findById } from "../../DB/DBMethods.js";
 import { asyncHandler } from "../utils/errorHandling.js";
 import { verifyToken } from "../utils/GenerateAndVerifyToken.js";
+
 export const roles = {
   User: "User",
   Admin: "Admin",
   Vendor: "Vendor",
 };
+
 export const auth = (accessRoles = []) => {
   return asyncHandler(async (req, res, next) => {
     const { authorization } = req.headers;
@@ -45,7 +47,10 @@ export const auth = (accessRoles = []) => {
     if (!accessRoles.includes(user.role)) {
       return next(new Error("Not authorized user", { cause: 403 }));
     }
+
+
     req.user = user;
+
     return next();
   });
 };

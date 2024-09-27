@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+
 async function sendEmail({to , cc, bcc, subject, message, attachments = [] } = {}) {
     let transporter = nodemailer.createTransport({
         service: 'gmail',

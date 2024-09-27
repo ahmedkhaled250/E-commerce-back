@@ -5,6 +5,8 @@ export const asyncHandler = (fn) => {
     });
   } ;
 };
+
+
 export const globalError = (err, req, res, next) => {
   if (err) {
     if (process.env.MOOD == "DEV") {

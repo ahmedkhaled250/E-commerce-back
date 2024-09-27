@@ -1,9 +1,7 @@
 import validation from "../../middleware/validation.js";
 import * as validators from "./auth.validation.js";
 import * as authController from "./controller/regiteration.js";
-import endPoint from "./auth.endPoints.js";
 import { Router } from "express";
-import { auth } from "../../middleware/auth.js";
 const router = Router();
 router.post("/signup", validation(validators.signup), authController.signup);
 router.get(

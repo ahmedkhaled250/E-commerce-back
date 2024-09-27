@@ -10,7 +10,10 @@ import orderRouter from "./order/order.router.js";
 import morgan from "morgan";
 import { globalError } from "../utils/errorHandling.js";
 import cors from "cors";
+
+
 const bootstrap = (app, express) => {
+
   app.use((req, res, next) => {
     if (req.originalUrl == "/order/webhook") {
       next();
@@ -18,14 +21,21 @@ const bootstrap = (app, express) => {
       express.json()(req, res, next);
     }
   });
+
   // Setup cors
+
   app.use(cors());
+
   // morgan check error
+
   if (process.env.MOOD == "DEV") {
     app.use(morgan("dev"));
   } else {
-  app.use(morgan("combined"));
+    app.use(morgan("combined"));
   }
+
+  // axios.post("baseUrl/subcategory/subCategoryByCategoryId/cvyuka",)
+
   // Setup api routing
   app.use(`/auth`, authRouter);
   app.use(`/user`, userRouter);
@@ -36,6 +46,7 @@ const bootstrap = (app, express) => {
   app.use(`/coupon`, couponRouter);
   app.use(`/cart`, cartRouter);
   app.use(`/order`, orderRouter);
+
   app.use("*", (req, res) => {
     res.status(404).json({ message: "In-valid routing" });
   });
