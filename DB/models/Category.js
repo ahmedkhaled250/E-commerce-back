@@ -10,8 +10,8 @@ const categorySchema = new Schema(
       unique: [true, "name must be unique value"],
       lowercase: true,
     },
-    slug: String,
-    image: {
+
+    slug: String,    image: {
       type: { secure_url: String, public_id: String },
       required: [true, "Image is required"],
     },

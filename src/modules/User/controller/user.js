@@ -1,6 +1,7 @@
 import {
   find,
   findById,
+  findByIdAndUpdate,
   findOne,
   updateOne,
 } from "../../../../DB/DBMethods.js";
@@ -12,7 +13,9 @@ import { decrypt, encrypt } from "../../../utils/encryptAndDecrypt.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 export const updateUser = asyncHandler(async (req, res, next) => {
   const { user } = req;
+
   const { email, phone, DOB } = req.body;
+
   if (user.deleted) {
     return next(new Error("Your account is deleted", { cause: 400 }));
   }
@@ -53,6 +56,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     });
     const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`;
     const rfLink = `${req.protocol}://${req.headers.host}/auth/refreshEmail/${refreshToken}`;
+
     const message = `<!DOCTYPE html>
     <html>
     <head>
@@ -165,6 +169,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
   }
   if (phone) {
     const decryptedPhone = decrypt({ encryptedText: user.phone });
+
     if (decryptedPhone == phone) {
       return next(
         new Error("You cannot update your phone by the same phone", {
@@ -172,13 +177,12 @@ export const updateUser = asyncHandler(async (req, res, next) => {
         })
       );
     }
+
     const encryptedPhone = encrypt({ plainText: phone });
     req.body.phone = encryptedPhone;
   }
   if (DOB) {
-    if (DOB) {
-      req.body.age = calculateAge(DOB)
-    }
+    req.body.age = calculateAge(DOB)
   }
   const updateUser = await findByIdAndUpdate({
     model: userModel,

@@ -14,8 +14,8 @@ import {
 import { compare, hash } from "../../../utils/HashAndCompare.js";
 import { encrypt } from "../../../utils/encryptAndDecrypt.js";
 import calculateAge from "../../../utils/calcAge.js";
-export const signup = asyncHandler(async (req, res, next) => {
 
+export const signup = asyncHandler(async (req, res, next) => {
   const { userName, password, phone, gender, address, role, DOB } = req.body;
   const email = req.body.email.toLowerCase();
   const user = await findOne({
@@ -23,6 +23,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     condition: { email },
     select: "email",
   });
+
   if (user) {
     return next(new Error("Email exist", { cause: 409 }));
   }
@@ -37,7 +38,9 @@ export const signup = asyncHandler(async (req, res, next) => {
     signature: process.env.EMAILTOKEN,
     expiresIn: 60 * 60 * 24,
   });
+
   const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`;
+
   const rfLink = `${req.protocol}://${req.headers.host}/auth/refreshEmail/${refreshToken}`;
 
   const message = `<!DOCTYPE html>
@@ -137,6 +140,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   </table>
   </body>
   </html>`;
+
   const info = await sendEmail({
     to: email,
     subject: "Confirmation-Email",
@@ -149,7 +153,9 @@ export const signup = asyncHandler(async (req, res, next) => {
   if (DOB) {
     age = calculateAge(DOB)
   }
+
   const hashPassword = hash({ plaintext: password });
+  // bcrypt 
   const encryptedPhone = encrypt({ phone });
 
   const newUser = await create({
@@ -167,7 +173,6 @@ export const signup = asyncHandler(async (req, res, next) => {
     },
   });
   return res.status(201).json({ message: "Done", userId: newUser._id });
-
 });
 
 export const confirmEmail = asyncHandler(async (req, res, next) => {
@@ -186,6 +191,7 @@ export const confirmEmail = asyncHandler(async (req, res, next) => {
   }
   return res.status(200).json({ message: "Done" });
 });
+
 export const refreshEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
   const decoded = verifyToken({ token, signature: process.env.EMAILTOKEN });
@@ -314,6 +320,7 @@ export const refreshEmail = asyncHandler(async (req, res, next) => {
   }
   return res.status(200).json({ message: "Go to confirm your email" });
 });
+
 export const signin = asyncHandler(async (req, res, next) => {
   const { password } = req.body;
   const email = req.body.email.toLowerCase();
@@ -324,10 +331,13 @@ export const signin = asyncHandler(async (req, res, next) => {
   if (!user.confirmEmail) {
     return next(new Error("Confirm your email first", { cause: 400 }));
   }
+
   if (user.status == "blocked") {
     return next(new Error("your account is blocked", { cause: 400 }));
   }
+
   const match = compare({ plaintext: password, hashValue: user.password });
+  
   if (!match) {
     return next(new Error("Password is wrong", { cause: 400 }));
   }
@@ -343,6 +353,7 @@ export const signin = asyncHandler(async (req, res, next) => {
   await user.save();
   return res.status(200).json({ message: "Done", token, refresh_token, role: user.role });
 });
+
 export const refreshToken = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
   const decoded = verifyToken({ token, signature: process.env.TOKINSEGNITURE });
@@ -365,6 +376,7 @@ export const refreshToken = asyncHandler(async (req, res, next) => {
   }
   return res.status(200).json({ message: "Done", token: newToken, refreshToken: token, role: user.role });
 });
+
 export const sendCode = asyncHandler(async (req, res, next) => {
   const email = req.body.email.toLowerCase();
   const user = await findOne({
@@ -377,6 +389,7 @@ export const sendCode = asyncHandler(async (req, res, next) => {
   }
   // const code = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
   const nanoid = customAlphabet("123456789", 4);
+
   const code = nanoid();
   user.code = code;
   await user.save();
@@ -386,6 +399,7 @@ export const sendCode = asyncHandler(async (req, res, next) => {
   await sendEmail({ to: user.email, subject: "Forget password", message });
   return res.status(200).json({ message: "Done" });
 });
+
 export const forgetPassword = asyncHandler(async (req, res, next) => {
   const { code, password } = req.body;
   const email = req.body.email.toLowerCase();
@@ -403,7 +417,9 @@ export const forgetPassword = asyncHandler(async (req, res, next) => {
   if (user.code != code) {
     return next(new Error("this code is wrong", { cause: 400 }));
   }
+  
   const hashPassword = hash({ plaintext: password });
+
   user.code = null;
   user.password = hashPassword;
   user.status = "online";

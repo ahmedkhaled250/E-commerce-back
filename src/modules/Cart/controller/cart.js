@@ -113,7 +113,6 @@ export const deleteFromCart = asyncHandler(async (req, res, next) => {
         model: cartModel, condition: { _id: cart._id }, data: { $pull: { products: deleteProduct._id }, finalPrice: finalPrice.toFixed(2) },
         option: { new: true }
       })
-      console.log(cart.products);
       match = true;
       break;
     }
