@@ -398,7 +398,6 @@ export const products = async (req, res, next) => {
     req.query,
     productModel.find({ deleted: false }).populate(populate)
   )
-    .paginate()
     .filter()
     .sort()
     .search()
@@ -439,7 +438,6 @@ export const MyProducts = asyncHandler(async (req, res, next) => {
     productModel.find({ createdBy: user._id }).populate(populate)
   )
     .filter()
-    .paginate()
     .sort()
     .select()
     .search();
@@ -551,7 +549,6 @@ export const productsOfSpecificSubcategory = asyncHandler(
       productModel.find({ subcategoryId , deleted:false }).populate(populate)
     )
       .filter()
-      .paginate()
       .sort()
       .select()
       .search();
@@ -593,7 +590,6 @@ export const productsOfSpecificCategory = asyncHandler(
       productModel.find({ categoryId, deleted: false }).populate(populate)
     )
       .filter()
-      .paginate()
       .sort()
       .select()
       .search();
@@ -635,7 +631,6 @@ export const productsOfSpecificBrand = asyncHandler(
       productModel.find({ brandId, deleted: false }).populate(populate)
     )
       .filter()
-      .paginate()
       .sort()
       .select()
       .search();
