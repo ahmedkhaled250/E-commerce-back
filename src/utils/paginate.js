@@ -1,4 +1,4 @@
-const paginate = ({ page = 1, size = 1 } = {}) => {
+const paginate = ({ page = 1, size = 40 } = {}) => {
   if (page <= 0) {
     page = 1;
   }
